@@ -1,0 +1,60 @@
+---
+- name: Install Docker and Docker Compose
+  hosts: all
+  become: yes
+  
+  tasks:
+  - name: Install dependencies
+    block:
+      - name: Install dependencies for Debian-like systems
+        apt:
+          name: "{{ item }}"
+          state: present
+        loop:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+          
+  #     - name: Install dependencies for RHEL systems
+  #       yum:
+  #         name: "{{ item }}"
+  #         state: present
+  #       loop:
+  #         - yum-utils
+  #         - device-mapper-persistent-data
+  #         - lvm2
+
+  # - name: Install Docker
+  #   block:
+  #     - name: Install Docker for Debian-like systems
+  #       apt:
+  #         name: docker.io
+  #         state: present
+
+  #     - name: Install Docker for RHEL systems
+  #       yum:
+  #         name: docker-ce
+  #         state: present
+
+  - name: Install Docker Compose
+    block:
+      - name: Install Docker Compose for Debian-like systems
+        shell: |
+          curl -fsSL https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          apt-get update
+          apt-get install docker-compose
+          
+      - name: Install Docker Compose for RHEL systems
+        shell: |
+          sudo yum-config-manager --add-repo https://download.docker.com/linux/{{ ansible_distribution | lower }}/docker-ce.repo
+          sudo yum install docker-compose
+          
+  - name: Start and enable Docker service
+    service:
+      name: docker
+      state: started
+      enabled: yes
+
