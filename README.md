@@ -1,5 +1,5 @@
 # Task-Codica-DevOps
 
-Uses infrastructure deployment using modules (Unfinished)
+tf-template-terraform - Uses infrastructure deployment using modules (UNFINISHED!)
 
-Uses a set of .tf files for each service
+terraform-template - Uses a set of .tf files for each service
