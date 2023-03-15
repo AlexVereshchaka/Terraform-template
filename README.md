@@ -1,4 +1,4 @@
-# Task-Codica-DevOps
+# TERRAFORM TEMPLATE
 
 tf-template-terraform - Uses infrastructure deployment using modules (UNFINISHED!)
 
